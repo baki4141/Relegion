@@ -39,35 +39,28 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses || true
 
-      # ── 6. Install Capacitor CLI + dependencies ───────────────
+      # ── 6. Install Capacitor dependencies ─────────────────────
       - name: Install Capacitor and dependencies
-        run: |
-          npm install -g @capacitor/cli
-          npm init -y
-          npm install @capacitor/core @capacitor/android
+        run: npm install
 
-      # ── 7. Create capacitor.config.json ───────────────────────
-      #    Adjust appId and appName as needed
-      - name: Create capacitor.config.json
+      # ── 7. Create www/ folder and copy web assets into it ─────
+      #    Capacitor requires webDir to be a subdirectory, not "."
+      - name: Prepare www/ web assets folder
         run: |
-          cat > capacitor.config.json << 'EOF'
-          {
-            "appId": "com.konawin.puthi",
-            "appName": "ကိုးနဝင်း",
-            "webDir": ".",
-            "bundledWebRuntime": false,
-            "android": {
-              "allowMixedContent": false,
-              "backgroundColor": "#0a0c14"
-            }
-          }
-          EOF
+          mkdir -p www
+          cp index.html www/
+          cp style.css www/
+          cp app.js www/
+          cp manifest.json www/
+          if [ -d "icons" ]; then cp -r icons www/; fi
+          echo "✅ www/ contents:"
+          ls -la www/
 
       # ── 8. Add Android platform ───────────────────────────────
       - name: Add Android platform
         run: npx cap add android
 
-      # ── 9. Copy web assets into Android project ───────────────
+      # ── 9. Sync web assets into Android project ───────────────
       - name: Sync web assets to Android
         run: npx cap sync android
 
