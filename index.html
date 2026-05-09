@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>ကိုးနဝင်း ဂုဏ်တော်ပုတီး</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Myanmar:wght@400;700&family=Noto+Sans+Myanmar:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══════════════ SCREEN 1: INTRO / SPLASH ═══════════════ -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-bg">
+      <div class="lotus-ring"></div>
+      <div class="lotus-ring ring-2"></div>
+      <div class="lotus-ring ring-3"></div>
+    </div>
+    <div class="intro-content">
+      <div class="dharma-wheel">☸</div>
+      <h1 class="app-title">ကိုးနဝင်း<br>ဂုဏ်တော်ပုတီး</h1>
+      <p class="app-subtitle">အဓိဌာန်</p>
+      <div class="divider-ornament"><span>✦</span></div>
+
+      <div class="benefits-scroll">
+        <div class="benefits-inner">
+          <p class="benefit-heading">ဤပုတီးဆွဲ၏ ကျေးဇူးတော်များ</p>
+
+          <div class="benefit-card">
+            <span class="benefit-icon">🙏</span>
+            <p>ဘုရားသခင်၏ ဂုဏ်တော်ကိုး ပါးကို နေ့စဉ် ဆင်ခြင်သတိပြုကာ ကုသိုလ်ကံကို ပြည့်ဝစေသည်။</p>
+          </div>
+
+          <div class="benefit-card">
+            <span class="benefit-icon">✨</span>
+            <p>စိတ်ငြိမ်ဝပ်မှုနှင့် ပညာဉာဏ်ကို ဖွံ့ဖြိုးတိုးတက်စေပြီး ဘဝကို တည်ငြိမ်သောလမ်းသို့ ပို့ဆောင်သည်။</p>
+          </div>
+
+          <div class="benefit-card">
+            <span class="benefit-icon">💫</span>
+            <p>ကိုးနဝင်းပတ်လည် ၈၁ ရက်အတွင်း ပြည့်မြောက်ပါက ဗုဒ္ဓ ဂုဏ်တော်တော်မူသော ကာကွယ်မှုကို ရရှိသည်ဟု ဆိုသည်။</p>
+          </div>
+
+          <div class="benefit-card">
+            <span class="benefit-icon">🌸</span>
+            <p>ဆင်းရဲဒုက္ခများ ကင်းဝေးကာ ငါးပါးသီလ၊ ရှစ်ပါးသီလ ကောင်းမွန်စွာ ဆောက်တည်နိုင်ရန် အင်အား ပေးသည်။</p>
+          </div>
+
+          <div class="benefit-card">
+            <span class="benefit-icon">🔔</span>
+            <p>နေ့တိုင်း ဘုရားဂုဏ်တော်ကို ရွတ်ဖတ်ကာ ပုတီးစိပ်ခြင်းသည် ဘဝကို မြှင့်တင်သည့် မဂ်ဖိုလ်ဆီသို့ ဦးတည်သော ကျင့်စဉ်တစ်ခုဖြစ်သည်။</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-start">စတင်မည်</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════ SCREEN 2: SETUP ═══════════════ -->
+  <div id="screen-setup" class="screen">
+    <div class="setup-header">
+      <button class="btn-back" id="btn-back-to-intro">←</button>
+      <h2>ပုတီးအဓိဌာန် သတ်မှတ်မည်</h2>
+    </div>
+
+    <div class="setup-body">
+      <div class="setup-icon">🙏</div>
+      <p class="setup-instruction">သင်၏ လက်ရှိ အဆင့်နှင့် နေ့ကို ရွေးချယ်ပါ</p>
+
+      <div class="selector-group">
+        <label>အဆင့် (Stage)</label>
+        <div class="number-picker" id="picker-stage">
+          <button class="picker-btn" data-action="dec" data-target="stage">−</button>
+          <span class="picker-value" id="val-stage">1</span>
+          <button class="picker-btn" data-action="inc" data-target="stage">+</button>
+        </div>
+        <p class="picker-hint">အဆင့် ၁ မှ ၉ အထိ</p>
+      </div>
+
+      <div class="selector-group">
+        <label>နေ့ (Day)</label>
+        <div class="number-picker" id="picker-day">
+          <button class="picker-btn" data-action="dec" data-target="day">−</button>
+          <span class="picker-value" id="val-day">1</span>
+          <button class="picker-btn" data-action="inc" data-target="day">+</button>
+        </div>
+        <p class="picker-hint">နေ့ ၁ မှ ၉ အထိ</p>
+      </div>
+
+      <button class="btn-primary" id="btn-confirm-setup">အတည်ပြုမည်</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════ SCREEN 3: MAIN TRACKER ═══════════════ -->
+  <div id="screen-tracker" class="screen">
+    <div class="tracker-header">
+      <div class="progress-label">
+        <span id="lbl-stage">အဆင့် ၁</span>
+        <span class="dot-sep">·</span>
+        <span id="lbl-day">နေ့ ၁</span>
+      </div>
+      <button class="btn-reset" id="btn-reset" title="Reset">⟳</button>
+    </div>
+
+    <!-- Progress dots -->
+    <div class="day-dots" id="day-dots">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- Main card -->
+    <div class="main-card">
+      <div class="card-glow"></div>
+      <p class="card-label">ဤနေ့ ဂုဏ်တော်</p>
+      <h2 class="guna-name" id="guna-name">—</h2>
+      <div class="rounds-display">
+        <span class="rounds-number" id="rounds-number">—</span>
+        <span class="rounds-unit">ကြိမ်</span>
+      </div>
+      <div class="bead-row" id="bead-row">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Mini schedule -->
+    <div class="schedule-strip">
+      <p class="strip-title">ဤအဆင့်၏ ဇယား</p>
+      <div class="schedule-list" id="schedule-list">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <button class="btn-complete" id="btn-complete">
+      <span class="btn-complete-icon">✓</span>
+      စိပ်ပြီးပါပြီ
+    </button>
+  </div>
+
+
+  <!-- ═══════════════ SCREEN 4: STAGE COMPLETE ═══════════════ -->
+  <div id="screen-complete" class="screen">
+    <div class="complete-bg">
+      <div class="sparkle" style="--x:10%;--y:20%;--d:0s"></div>
+      <div class="sparkle" style="--x:80%;--y:15%;--d:0.3s"></div>
+      <div class="sparkle" style="--x:50%;--y:70%;--d:0.6s"></div>
+      <div class="sparkle" style="--x:25%;--y:80%;--d:0.2s"></div>
+      <div class="sparkle" style="--x:70%;--y:60%;--d:0.9s"></div>
+    </div>
+
+    <div class="complete-content">
+      <div class="complete-trophy">🏆</div>
+      <h2 class="complete-title">ဂုဏ်ယူပါသည်!</h2>
+      <p class="complete-stage-label" id="complete-stage-label">အဆင့် ၁ ပြီးစီးပါပြီ</p>
+
+      <div class="milestone-card" id="milestone-card">
+        <!-- filled by JS -->
+      </div>
+
+      <button class="btn-primary" id="btn-next-stage">နောက်အဆင့် ဆက်မည်</button>
+      <button class="btn-secondary" id="btn-done-all" style="display:none">ပြီးဆုံးပါပြီ 🎉</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════ SCREEN 5: ALL DONE ═══════════════ -->
+  <div id="screen-alldone" class="screen">
+    <div class="complete-bg gold-bg">
+      <div class="sparkle" style="--x:15%;--y:25%;--d:0s"></div>
+      <div class="sparkle" style="--x:85%;--y:20%;--d:0.4s"></div>
+      <div class="sparkle" style="--x:45%;--y:75%;--d:0.7s"></div>
+      <div class="sparkle" style="--x:30%;--y:85%;--d:0.15s"></div>
+      <div class="sparkle" style="--x:75%;--y:55%;--d:1s"></div>
+    </div>
+    <div class="complete-content">
+      <div class="complete-trophy" style="font-size:4rem">☸</div>
+      <h2 class="complete-title" style="font-size:1.8rem">ကိုးနဝင်းပုတီး<br>အဓိဌာန် ပြည့်မြောက်ပါပြီ!</h2>
+      <p class="alldone-text">ဘုရားဂုဏ်တော် ကိုးပါးကို ၈၁ ရက် မပျက်မကွက် ဆင်ခြင်ကာ ပုတီးစိပ်ပြီးပါပြီ။ ဤကုသိုလ်ကြောင့် ချမ်းသာသုခ၊ ဉာဏ်ပညာနှင့် မဂ်ဖိုလ်နိဗ္ဗာန် ဆီသို့ တိုးတက်ရောက်ရှိပါစေ။</p>
+      <button class="btn-primary" id="btn-restart">ထပ်မံ စတင်မည်</button>
+    </div>
+  </div>
+
+
+  <script src="app.js"></script>
+</body>
+</html>
