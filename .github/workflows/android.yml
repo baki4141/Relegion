@@ -1,103 +1,38 @@
-name: Build Android APK
-
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:   # allows manual trigger from GitHub UI
-
-jobs:
-  build-apk:
-    name: Build APK
-    runs-on: ubuntu-latest
-
-    steps:
-
-      # ── 1. Checkout repo ──────────────────────────────────────
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # ── 2. Set up Node.js ─────────────────────────────────────
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      # ── 3. Set up Java (required by Android SDK) ──────────────
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      # ── 4. Set up Android SDK ─────────────────────────────────
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      # ── 5. Accept Android SDK licenses ────────────────────────
-      - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses || true
-
-      # ── 6. Install Capacitor dependencies ─────────────────────
-      - name: Install Capacitor and dependencies
-        run: npm install
-
-      # ── 7. Create www/ folder and copy web assets into it ─────
-      #    Capacitor requires webDir to be a subdirectory, not "."
-      - name: Prepare www/ web assets folder
-        run: |
-          mkdir -p www
-          cp index.html www/
-          cp style.css www/
-          cp app.js www/
-          cp manifest.json www/
-          if [ -d "icons" ]; then cp -r icons www/; fi
-          echo "✅ www/ contents:"
-          ls -la www/
-
-      # ── 8. Add Android platform ───────────────────────────────
-      - name: Add Android platform
-        run: npx cap add android
-
-      # ── 9. Sync web assets into Android project ───────────────
-      - name: Sync web assets to Android
-        run: npx cap sync android
-
-      # ── 10. Make gradlew executable ───────────────────────────
-      - name: Make Gradle wrapper executable
-        run: chmod +x android/gradlew
-
-      # ── 11. Build debug APK ───────────────────────────────────
-      - name: Build debug APK
-        working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
-
-      # ── 12. Upload APK as artifact ────────────────────────────
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: konawin-puthi-debug
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 30
-
-      # ── 13. (Optional) Create a GitHub Release on push to main ─
-      - name: Create GitHub Release
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: build-${{ github.run_number }}
-          name: "ကိုးနဝင်း APK — Build ${{ github.run_number }}"
-          body: |
-            🙏 ကိုးနဝင်း ဂုဏ်တော်ပုတီး Android APK
-            
-            **Build:** ${{ github.run_number }}
-            **Commit:** ${{ github.sha }}
-            
-            ဒေါင်းလုဒ်ဆွဲပြီး Android ဖုန်းတွင် install လုပ်ပါ။
-            (Settings → Install unknown apps ကို ဖွင့်ထားရမည်)
-          files: android/app/build/outputs/apk/debug/app-debug.apk
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+{
+  "appId": "com.konawin.puthi",
+  "appName": "ကိုးနဝင်း",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#0a0c14",
+      "showSpinner": false,
+      "androidSplashResourceName": "splash",
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0a0c14"
+    },
+    "Keyboard": {
+      "resize": "body",
+      "resizeOnFullScreen": true
+    }
+  },
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#0a0c14",
+    "buildOptions": {
+      "keystorePath": null,
+      "keystorePassword": null,
+      "keystoreAlias": null,
+      "keystoreAliasPassword": null,
+      "releaseType": "APK"
+    }
+  },
+  "server": {
+    "androidScheme": "https",
+    "cleartext": false
+  }
+}
