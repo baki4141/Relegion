@@ -1,8 +1,7 @@
 {
   "appId": "com.konawin.puthi",
   "appName": "ကိုးနဝင်း",
-  "webDir": ".",
-  "bundledWebRuntime": false,
+  "webDir": "www",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 2000,
