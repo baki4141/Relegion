@@ -29,6 +29,34 @@ const GUNAS = {
 const BASE_SEQUENCE = [2, 9, 4, 7, 5, 3, 6, 1, 8];
 
 /**
+ * Weekday names in Burmese (0=Sunday … 6=Saturday, matching JS Date).
+ */
+const WEEKDAYS_MY = [
+  "တနင်္ဂနွေ",   // 0 Sunday
+  "တနင်္လာ",     // 1 Monday
+  "အင်္ဂါ",      // 2 Tuesday
+  "ဗုဒ္ဓဟူး",    // 3 Wednesday
+  "ကြာသပတေး",   // 4 Thursday
+  "သောကြာ",      // 5 Friday
+  "စနေ",         // 6 Saturday
+];
+
+/**
+ * Each stage starts on a fixed weekday (JS 0=Sun … 6=Sat).
+ * Stage 1 → Monday(1), Stage 2 → Wednesday(3), Stage 3 → Friday(5),
+ * Stage 4 → Sunday(0), Stage 5 → Tuesday(2), Stage 6 → Thursday(4),
+ * Stage 7 → Saturday(6), Stage 8 → Monday(1), Stage 9 → Wednesday(3)
+ * Pattern: Monday(1) +2 each stage, wrapping mod 7.
+ */
+const STAGE_START_WEEKDAY = [1, 3, 5, 0, 2, 4, 6, 1, 3]; // index = stage-1
+
+/** Return the Burmese weekday name for a given stage & day-in-stage (1–9). */
+function getWeekdayName(stage, day) {
+  const start = STAGE_START_WEEKDAY[stage - 1];
+  return WEEKDAYS_MY[(start + (day - 1)) % 7];
+}
+
+/**
  * Stage milestone blessings (shown on stage-complete screen).
  */
 const MILESTONES = {
@@ -182,7 +210,8 @@ let setupDay   = 1;
 
 function updateSetupDisplay() {
   document.getElementById("val-stage").textContent = setupStage;
-  document.getElementById("val-day").textContent   = setupDay;
+  // Show weekday name for the selected day within the selected stage
+  document.getElementById("val-day").textContent   = getWeekdayName(setupStage, setupDay);
 }
 
 document.getElementById("btn-back-to-intro").addEventListener("click", () => {
@@ -222,18 +251,30 @@ function renderTracker(stage, day) {
   const info = getDayInfo(stage, day);
 
   // Header labels
-  document.getElementById("lbl-stage").textContent = `အဆင့် ${stage}`;
-  document.getElementById("lbl-day").textContent   = `နေ့ ${day}`;
+  document.getElementById("lbl-stage").textContent   = `အဆင့် ${stage}`;
+  document.getElementById("lbl-day").textContent     = getWeekdayName(stage, day);
 
-  // Day dots
+  // Day dots — show weekday abbreviation below each dot
   const dotsEl = document.getElementById("day-dots");
   dotsEl.innerHTML = "";
   for (let d = 1; d <= 9; d++) {
+    const wrap = document.createElement("div");
+    wrap.className = "day-dot-wrap";
+
     const dot = document.createElement("div");
     dot.className = "day-dot";
-    if (d < day)  dot.classList.add("done");
+    if (d < day)   dot.classList.add("done");
     if (d === day) dot.classList.add("current");
-    dotsEl.appendChild(dot);
+
+    const lbl = document.createElement("span");
+    lbl.className = "day-dot-lbl";
+    // Short 2-char abbreviation from first 2 chars of weekday
+    lbl.textContent = getWeekdayName(stage, d).slice(0, 2);
+    if (d === day) lbl.classList.add("dot-lbl-active");
+
+    wrap.appendChild(dot);
+    wrap.appendChild(lbl);
+    dotsEl.appendChild(wrap);
   }
 
   // Guna name & rounds
@@ -261,7 +302,7 @@ function renderTracker(stage, day) {
 
     const dayLbl = document.createElement("span");
     dayLbl.className = "sched-day";
-    dayLbl.textContent = `နေ့ ${item.day}`;
+    dayLbl.textContent = getWeekdayName(stage, item.day);
 
     const rndLbl = document.createElement("span");
     rndLbl.className = "sched-rounds";
